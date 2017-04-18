@@ -1,7 +1,8 @@
+import math
 import pandas as pd 
 import numpy as np
 import matplotlib.pyplot as plt
-from bokeh.charts import Scatter, Bar
+from bokeh.charts import Scatter, Bar, color
 from bokeh.plotting import figure, output_file, show, ColumnDataSource
 from bokeh.models import HoverTool
 
@@ -35,6 +36,7 @@ def setup_scatter(animals):
     ag2 = ag.pivot(index = 'ZipCode',columns = 'Species',values ="License Number")
     ag2.Livestock.replace(np.nan, 0, inplace = True)
     ag2.sort_values('Livestock',inplace=True)
+    ag2.reset_index(inplace=True)
     return ag2
 
 
@@ -105,7 +107,7 @@ def bokeh_low_level_scatter(ag2):
 
     p.circle(ag2.Cat, ag2.Dog,
             color=ag2.color, fill_alpha=0.2, size=10, )
-    output_file("bokeh_low_level_scatter.html", title="iris.py example")
+    output_file("bokeh_low_level_scatter.html", title="Cats vs. Dogs")
     show(p)
 
 
@@ -152,9 +154,9 @@ def main():
 
     #SCATTER PLOTS-BOKEH
     scatter_animals = setup_scatter(animals)  
-    bokeh_high_level_scatter(ag2)
-    bokeh_low_level_scatter(ag2)  
-    bokeh_low_scatter_with_hover(ag2)
+    bokeh_high_level_scatter(scatter_animals)
+    bokeh_low_level_scatter(scatter_animals)  
+    bokeh_low_scatter_with_hover(scatter_animals)
 
     #BAR_MATPLOTLIB
     matplot_bar(bar_animals)
