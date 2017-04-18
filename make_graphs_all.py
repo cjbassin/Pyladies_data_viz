@@ -139,12 +139,25 @@ def bokeh_low_scatter_with_hover(ag2):
     output_file("bokeh_with_hover.html")
     show(p)
 
+###fun stuff
+def setupnamesearch(animals):
+    animals['lowname'] = animals.Name.apply(lambda x: x.lower())
+    ani=animals.groupby('lowname').count()
+    animals_dict = ani.T.to_dict()
+    return animals_dict
 
+def check_name(animals_dict=animals_dict, name):
+    import pprint
+    if name in animals_dict.keys():
+        pprint.pprint(animals_dict[name])
+    else:
+        print ('Sorry no one by that name here')
 
 
 def main():
     filename  = 'Seattle_Pet_Licenses.csv'
     animals = load_clean_data(filename)
+
     
     
     #BAR PLOTS-BOKEH
@@ -164,6 +177,9 @@ def main():
 
     #SCATTER-MATPLOTLIB
     matplot_scatter(scatter_animals)
+
+    #fun
+    
 
 
 if __name__ == '__main__':
