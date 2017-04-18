@@ -1,12 +1,13 @@
 import pandas as pd 
 import numpy as np
+import matplotlib.pyplot as plt
 from bokeh.charts import Scatter, Bar
 from bokeh.plotting import figure, output_file, show, ColumnDataSource
 from bokeh.models import HoverTool
 
 
 
-filename  = 'Seattle_Pet_Licenses.csv'
+
 
 def load_clean_data(filename):
     animals = pd.read_csv(filename)
@@ -32,12 +33,13 @@ def setup_scatter(animals):
     ag= animals.groupby(['ZipCode','Species']).count()
     ag.reset_index(inplace=True)
     ag2 = ag.pivot(index = 'ZipCode',columns = 'Species',values ="License Number")
-    ag2.Livestock.replace(np.nan,0, inplace = True)
+    ag2.Livestock.replace(np.nan, 0, inplace = True)
     ag2.sort_values('Livestock',inplace=True)
     return ag2
 
 
 def write_to_altair_data(anidatadf, cols):
+    #turn pandas dataframe into altair style data
     alt_data =[anidatadf[cols].T.iloc[:,x].to_dict() for x in range(len(anidatadf))]
     
     return alt_data
@@ -132,12 +134,38 @@ def bokeh_low_scatter_with_hover(ag2):
     p = figure( tools=[hover], title="Cats vs Dogs")
 
     p.circle('Cat', 'Dog', color ='color',fill_alpha =0.2, size=10, source=source)
-    output_file("boek_with_hover.html")
+    output_file("bokeh_with_hover.html")
     show(p)
 
 
 
 
+def main():
+    filename  = 'Seattle_Pet_Licenses.csv'
+    animals = load_clean_data(filename)
+    
+    
+    #BAR PLOTS-BOKEH
+    bar_animals = setup_bar_names(animals)
+    bokeh_high_level_bar(bar_animals)
+    bokeh_low_level_bar(bar_animals)
+
+    #SCATTER PLOTS-BOKEH
+    scatter_animals = setup_scatter(animals)  
+    bokeh_high_level_scatter(ag2)
+    bokeh_low_level_scatter(ag2)  
+    bokeh_low_scatter_with_hover(ag2)
+
+    #BAR_MATPLOTLIB
+    matplot_bar(bar_animals)
+
+
+    #SCATTER-MATPLOTLIB
+    matplot_scatter(scatter_animals)
+
+
+if __name__ == '__main__':
+    main()
 
 
 
