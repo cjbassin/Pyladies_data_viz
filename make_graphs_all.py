@@ -60,7 +60,7 @@ def bokeh_high_level_scatter(ag2):
 
 
 def bokeh_high_level_bar(ani):
-    b = Bar(ani.tail(30), label="Animal's Name", values='License Number', legend='top_right')
+    b = Bar(ani.tail(30), label="Name", values='License Number')
     output_file('bokeh_high_level_bar.html')
     show(b)
 
