@@ -146,7 +146,7 @@ def setupnamesearch(animals):
     animals_dict = ani.T.to_dict()
     return animals_dict
 
-def check_name(animals_dict=animals_dict, name):
+def check_name(name):
     import pprint
     if name in animals_dict.keys():
         pprint.pprint(animals_dict[name])
